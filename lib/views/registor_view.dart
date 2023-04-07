@@ -1,5 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+
+import '../firebase_options.dart';
 
 class RegistorView extends StatefulWidget {
   const RegistorView({super.key});
@@ -29,59 +32,54 @@ class _RegistorViewState extends State<RegistorView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("Registor"),
-      ),
-      body: FutureBuilder(
-        builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-          // switch (snapshot.connectionState) {
-          //   case ConnectionState.done:
-          return Column(
-            children: [
-              TextField(
-                enableSuggestions: false,
-                autocorrect: true,
-                keyboardType: TextInputType.emailAddress,
-                controller: _emailController,
-                decoration: InputDecoration(hintText: "Enter your Email"),
-              ),
-              TextField(
-                obscureText: true,
-                enableSuggestions: false,
-                autocorrect: true,
-                controller: _passwordController,
-                decoration: InputDecoration(hintText: "Enter your password"),
-              ),
-              Center(
-                child: TextButton(
-                  onPressed: () async {
-                    final email = _emailController.text;
-                    final password = _passwordController.text;
-                    try {
-                      final userCredential = await FirebaseAuth.instance
-                          .createUserWithEmailAndPassword(
-                              email: email, password: password);
-                      print(userCredential);
-                    } on FirebaseAuthException catch (e) {
-                      if (e.code == "weak-password") {
-                        print("WEAK PASSWORD");
-                      } else if (e.code == "email-already-in-use") {
-                        print("EMAIL ALREADY IN USE");
-                      } else if (e.code == "invalid-email") {
-                        print("INVALID EMAIL");
-                      }
-                    }
-                  },
-                  child: const Text("Registor"),
-                ),
-              ),
-            ],
-          );
-          // default:
-          //   // ignore: prefer_const_constructors
-          //   return Center(child: const Text("Loading....."));
-          // }
-        },
+      appBar: AppBar(title: const Text("Registor")),
+      body: Column(
+        children: [
+          TextField(
+            enableSuggestions: false,
+            autocorrect: true,
+            keyboardType: TextInputType.emailAddress,
+            controller: _emailController,
+            decoration: InputDecoration(hintText: "Enter your Email"),
+          ),
+          TextField(
+            obscureText: true,
+            enableSuggestions: false,
+            autocorrect: true,
+            controller: _passwordController,
+            decoration: InputDecoration(hintText: "Enter your password"),
+          ),
+          Center(
+            child: TextButton(
+              onPressed: () async {
+                final email = _emailController.text;
+                final password = _passwordController.text;
+                try {
+                  final userCredential = await FirebaseAuth.instance
+                      .createUserWithEmailAndPassword(
+                          email: email, password: password);
+                  print(userCredential);
+                } on FirebaseAuthException catch (e) {
+                  if (e.code == "weak-password") {
+                    print("WEAK PASSWORD");
+                  } else if (e.code == "email-already-in-use") {
+                    print("EMAIL ALREADY IN USE");
+                  } else if (e.code == "invalid-email") {
+                    print("INVALID EMAIL");
+                  }
+                }
+              },
+              child: const Text("Registor"),
+            ),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.pushNamedAndRemoveUntil(
+                  context, "/login/", (route) => false);
+            },
+            child: const Text("Too Login.."),
+          )
+        ],
       ),
     );
   }

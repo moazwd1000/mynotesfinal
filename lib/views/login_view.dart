@@ -35,57 +35,51 @@ class _LoginViewState extends State<LoginView> {
       appBar: AppBar(
         title: const Text("Login"),
       ),
-      body: FutureBuilder(
-        future: Firebase.initializeApp(
-            options: DefaultFirebaseOptions.currentPlatform),
-        builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-          switch (snapshot.connectionState) {
-            case (ConnectionState.done):
-              return Column(
-                children: [
-                  TextField(
-                    enableSuggestions: false,
-                    autocorrect: true,
-                    keyboardType: TextInputType.emailAddress,
-                    controller: _emailController,
-                    decoration: InputDecoration(hintText: "Enter your Email"),
-                  ),
-                  TextField(
-                    obscureText: true,
-                    enableSuggestions: false,
-                    autocorrect: true,
-                    controller: _passwordController,
-                    decoration:
-                        InputDecoration(hintText: "Enter your password"),
-                  ),
-                  Center(
-                    child: TextButton(
-                      onPressed: () async {
-                        final email = _emailController.text;
-                        final password = _passwordController.text;
-                        try {
-                          final userCredential = await FirebaseAuth.instance
-                              .signInWithEmailAndPassword(
-                                  email: email, password: password);
-                          print(userCredential);
-                        } on FirebaseAuthException catch (e) {
-                          if (e.code == "user-not-found") {
-                            print("USER NOT FOUND");
-                          } else if (e.code == "wrong-password") {
-                            print("WRONG PASSWORD");
-                          }
-                        } catch (e) {}
-                      },
-                      child: const Text("Login"),
-                    ),
-                  ),
-                ],
-              );
-            default:
-              // ignore: prefer_const_constructors
-              return Center(child: const Text("Loading....."));
-          }
-        },
+      body: Column(
+        children: [
+          TextField(
+            enableSuggestions: false,
+            autocorrect: true,
+            keyboardType: TextInputType.emailAddress,
+            controller: _emailController,
+            decoration: InputDecoration(hintText: "Enter your Email"),
+          ),
+          TextField(
+            obscureText: true,
+            enableSuggestions: false,
+            autocorrect: true,
+            controller: _passwordController,
+            decoration: InputDecoration(hintText: "Enter your password"),
+          ),
+          Center(
+            child: TextButton(
+              onPressed: () async {
+                final email = _emailController.text;
+                final password = _passwordController.text;
+                try {
+                  final userCredential = await FirebaseAuth.instance
+                      .signInWithEmailAndPassword(
+                          email: email, password: password);
+                  print(userCredential);
+                } on FirebaseAuthException catch (e) {
+                  if (e.code == "user-not-found") {
+                    print("USER NOT FOUND");
+                  } else if (e.code == "wrong-password") {
+                    print("WRONG PASSWORD");
+                  }
+                } catch (e) {}
+              },
+              child: const Text("Login"),
+            ),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.pushNamedAndRemoveUntil(
+                  context, "/register/", (route) => false);
+            },
+            child: const Text("Not registered yet ? Press Here.."),
+          )
+        ],
       ),
     );
   }
