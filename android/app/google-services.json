@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "747395569367",
+    "project_id": "mynotes-moazfinalnew",
+    "storage_bucket": "mynotes-moazfinalnew.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:747395569367:android:a2c066bc701e54b73bc292",
+        "android_client_info": {
+          "package_name": "com.example.mynotesfinal"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "747395569367-lfv9oh24d42p5p53i4ivtd4jguoi4e22.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBC_NA3Zk6vbGc5jpI2pVSWW8dJ1zcMqYw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "747395569367-lfv9oh24d42p5p53i4ivtd4jguoi4e22.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
