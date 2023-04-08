@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:mynotesfinal/constants/routes.dart';
 
 import '../firebase_options.dart';
 
@@ -75,7 +76,7 @@ class _RegistorViewState extends State<RegistorView> {
           TextButton(
             onPressed: () {
               Navigator.pushNamedAndRemoveUntil(
-                  context, "/login/", (route) => false);
+                  context, kloginRoute, (route) => false);
             },
             child: const Text("Too Login.."),
           )

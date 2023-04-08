@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:mynotesfinal/constants/routes.dart';
 import 'package:mynotesfinal/views/login_view.dart';
 
 import 'package:mynotesfinal/views/registor_view.dart';
@@ -18,9 +19,9 @@ void main() {
       ),
       home: const HomePage(),
       routes: {
-        "/login/": (context) => const LoginView(),
-        "/registor/": (context) => const RegistorView(),
-        "/notes/": (context) => const NotesView(),
+        kloginRoute: (context) => const LoginView(),
+        kregistorRoute: (context) => const RegistorView(),
+        knotesRoute: (context) => const NotesView(),
       },
     ),
   );
@@ -80,7 +81,7 @@ class _NotesViewState extends State<NotesView> {
                   if (shouldLogout) {
                     await FirebaseAuth.instance.signOut();
                     Navigator.of(context).pushNamedAndRemoveUntil(
-                      "/login/",
+                      kloginRoute,
                       (_) => false,
                     );
                   }
