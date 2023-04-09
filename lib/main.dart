@@ -22,6 +22,7 @@ void main() {
         kloginRoute: (context) => const LoginView(),
         kregistorRoute: (context) => const RegistorView(),
         knotesRoute: (context) => const NotesView(),
+        kverifyEMailRoute: (context) => const EmailVerifyView(),
       },
     ),
   );
