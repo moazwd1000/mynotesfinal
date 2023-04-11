@@ -1,7 +1,7 @@
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:mynotesfinal/constants/routes.dart';
+import 'package:mynotesfinal/services/auth/auth_exceptions.dart';
+import 'package:mynotesfinal/services/auth/auth_services.dart';
 
 import '../firebase_options.dart';
 import '../utilites/show_error_dialog.dart';
@@ -59,26 +59,23 @@ class _LoginViewState extends State<LoginView> {
                 final email = _emailController.text;
                 final password = _passwordController.text;
                 try {
-                  await FirebaseAuth.instance.signInWithEmailAndPassword(
-                      email: email, password: password);
-                  final user = FirebaseAuth.instance.currentUser;
-                  if (!user!.emailVerified) {
+                  await AuthService.firebase()
+                      .logIn(email: email, password: password);
+
+                  final user = AuthService.firebase().currentUser;
+                  if (!user!.isEmailVerified) {
                     Navigator.pushNamedAndRemoveUntil(
                         context, kverifyEMailRoute, (route) => false);
                   } else {
                     Navigator.pushNamedAndRemoveUntil(
                         context, knotesRoute, (route) => false);
                   }
-                } on FirebaseAuthException catch (e) {
-                  if (e.code == "user-not-found") {
-                    showErorAlert(context, "USER NOT FOUND");
-                  } else if (e.code == "wrong-password") {
-                    showErorAlert(context, "WRONG PASSWORD");
-                  } else {
-                    showErorAlert(context, "Error:${e.code}");
-                  }
-                } catch (e) {
-                  showErorAlert(context, e.toString());
+                } on UserNotFoundAuthException {
+                  showErorAlert(context, "USER NOT FOUND");
+                } on WrongPasswordAuthException {
+                  showErorAlert(context, "WRONG PASSWORD");
+                } on GenericAuthException {
+                  showErorAlert(context, "Authentication Error");
                 }
               },
               child: const Text("Login"),

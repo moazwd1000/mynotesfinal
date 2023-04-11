@@ -4,6 +4,8 @@ import 'package:mynotesfinal/services/auth/auth_exceptions.dart';
 import 'package:mynotesfinal/services/auth/auth_provider.dart';
 import 'package:mynotesfinal/services/auth/auth_user.dart';
 
+import '../../firebase_options.dart';
+
 class FirebaseAuthProvider implements AuthProvider {
   @override
   Future<AuthUser> createUser(
@@ -86,5 +88,12 @@ class FirebaseAuthProvider implements AuthProvider {
     } else {
       throw UserNotLoggedInAuthException();
     }
+  }
+
+  @override
+  Future<void> initialize() async {
+    await Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform,
+    );
   }
 }

@@ -1,7 +1,7 @@
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:mynotesfinal/constants/routes.dart';
+import 'package:mynotesfinal/services/auth/auth_exceptions.dart';
+import 'package:mynotesfinal/services/auth/auth_services.dart';
 
 import '../firebase_options.dart';
 import '../utilites/show_error_dialog.dart';
@@ -57,23 +57,20 @@ class _RegistorViewState extends State<RegistorView> {
                 final email = _emailController.text;
                 final password = _passwordController.text;
                 try {
-                  await FirebaseAuth.instance.createUserWithEmailAndPassword(
-                      email: email, password: password);
-                  final user = FirebaseAuth.instance.currentUser;
-                  await user?.sendEmailVerification();
+                  await AuthService.firebase()
+                      .createUser(email: email, password: password);
+
+                  AuthService.firebase().sendEmailVerfication();
+
                   Navigator.of(context).pushNamed(kverifyEMailRoute);
-                } on FirebaseAuthException catch (e) {
-                  if (e.code == "weak-password") {
-                    showErorAlert(context, "WEAK PASSWORD");
-                  } else if (e.code == "email-already-in-use") {
-                    showErorAlert(context, "EMAIL ALREADY IN USE");
-                  } else if (e.code == "invalid-email") {
-                    showErorAlert(context, "INVALID EMAIL");
-                  } else {
-                    showErorAlert(context, "ERROR: ${e.code}");
-                  }
-                } catch (e) {
-                  showErorAlert(context, e.toString());
+                } on WeakPasswordAuthException {
+                  showErorAlert(context, "WEAK PASSWORD");
+                } on EmailAlreadyInUseAuthException {
+                  showErorAlert(context, "EMAIL ALREADY IN USE");
+                } on InvalidEmailAuthException {
+                  showErorAlert(context, "INVALID EMAIL");
+                } on GenericAuthException {
+                  showErorAlert(context, "Failed");
                 }
               },
               child: const Text("Registor"),
