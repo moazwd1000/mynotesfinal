@@ -1,11 +1,8 @@
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:mynotesfinal/services/auth/auth_services.dart';
-import 'package:mynotesfinal/services/crud/notes_service.dart';
-import 'package:sqflite/sqflite.dart';
-
 import '../../constants/routes.dart';
 import '../../enums/menu_actions.dart';
+import '../../services/auth/auth_services.dart';
+import '../../services/crud/notes_service.dart';
 
 class NotesView extends StatefulWidget {
   const NotesView({Key? key}) : super(key: key);
@@ -16,16 +13,18 @@ class NotesView extends StatefulWidget {
 
 class _NotesViewState extends State<NotesView> {
   late final NotesService _notesService;
-  String? get userEmail => AuthService.firebase().currentUser?.email;
+  String get userEmail => AuthService.firebase().currentUser!.email!;
 
   @override
   void initState() {
     _notesService = NotesService();
+    super.initState();
   }
 
   @override
   void dispose() {
     _notesService.close();
+    super.dispose();
   }
 
   @override
@@ -35,10 +34,11 @@ class _NotesViewState extends State<NotesView> {
         title: const Text('Your Notes'),
         actions: [
           IconButton(
-              onPressed: () {
-                Navigator.of(context).pushNamed(knewNoteROute);
-              },
-              icon: const Icon(Icons.add_box_outlined)),
+            onPressed: () {
+              Navigator.of(context).pushNamed(knewNoteROute);
+            },
+            icon: const Icon(Icons.add),
+          ),
           PopupMenuButton<MenuAction>(
             onSelected: (value) async {
               switch (value) {
@@ -65,24 +65,24 @@ class _NotesViewState extends State<NotesView> {
         ],
       ),
       body: FutureBuilder(
-        future: _notesService.getOrCreateUser(email: userEmail ?? ""),
-        builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+        future: _notesService.getOrCreateUser(email: userEmail),
+        builder: (context, snapshot) {
           switch (snapshot.connectionState) {
             case ConnectionState.done:
               return StreamBuilder(
                 stream: _notesService.allNotes,
-                builder: (BuildContext context,
-                    AsyncSnapshot<List<DatabaseNote>> snapshot) {
+                builder: (context, snapshot) {
                   switch (snapshot.connectionState) {
                     case ConnectionState.waiting:
-                      return const Text("Waiting for all notes..");
+                    case ConnectionState.active:
+                      return const Text('Waiting for all notes...');
                     default:
-                      return CircularProgressIndicator();
+                      return const CircularProgressIndicator();
                   }
                 },
               );
             default:
-              return CircularProgressIndicator();
+              return const CircularProgressIndicator();
           }
         },
       ),

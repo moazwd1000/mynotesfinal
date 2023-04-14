@@ -28,7 +28,7 @@ void main() {
         kregistorRoute: (context) => const RegistorView(),
         knotesRoute: (context) => const NotesView(),
         kverifyEMailRoute: (context) => const EmailVerifyView(),
-        knewNoteROute: (context) => const NewNotesView(),
+        knewNoteROute: (context) => const NewNoteView(),
       },
     ),
   );
