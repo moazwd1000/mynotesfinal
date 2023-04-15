@@ -75,7 +75,24 @@ class _NotesViewState extends State<NotesView> {
                   switch (snapshot.connectionState) {
                     case ConnectionState.waiting:
                     case ConnectionState.active:
-                      return const Text('Waiting for all notes...');
+                      if (snapshot.hasData) {
+                        final allnotes = snapshot.data as List<DatabaseNote>;
+
+                        return ListView.builder(
+                            itemCount: allnotes.length,
+                            itemBuilder: (BuildContext context, int index) {
+                              final note = allnotes[index];
+                              return ListTile(
+                                title: Text(
+                                  note.text,
+                                  softWrap: true,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              );
+                            });
+                      } else {
+                        return const CircularProgressIndicator();
+                      }
                     default:
                       return const CircularProgressIndicator();
                   }
