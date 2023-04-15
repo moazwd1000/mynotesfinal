@@ -4,7 +4,7 @@ import 'package:mynotesfinal/services/auth/auth_exceptions.dart';
 import 'package:mynotesfinal/services/auth/auth_services.dart';
 
 import '../firebase_options.dart';
-import '../utilites/show_error_dialog.dart';
+import '../utilites/dialog/error_dialog.dart';
 
 class RegistorView extends StatefulWidget {
   const RegistorView({super.key});
@@ -64,13 +64,13 @@ class _RegistorViewState extends State<RegistorView> {
 
                   Navigator.of(context).pushNamed(kverifyEMailRoute);
                 } on WeakPasswordAuthException {
-                  showErorAlert(context, "WEAK PASSWORD");
+                  showErrorDialog(context, "WEAK PASSWORD");
                 } on EmailAlreadyInUseAuthException {
-                  showErorAlert(context, "EMAIL ALREADY IN USE");
+                  showErrorDialog(context, "EMAIL ALREADY IN USE");
                 } on InvalidEmailAuthException {
-                  showErorAlert(context, "INVALID EMAIL");
+                  showErrorDialog(context, "INVALID EMAIL");
                 } on GenericAuthException {
-                  showErorAlert(context, "Failed");
+                  showErrorDialog(context, "Failed");
                 }
               },
               child: const Text("Registor"),

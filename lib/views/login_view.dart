@@ -4,7 +4,7 @@ import 'package:mynotesfinal/services/auth/auth_exceptions.dart';
 import 'package:mynotesfinal/services/auth/auth_services.dart';
 
 import '../firebase_options.dart';
-import '../utilites/show_error_dialog.dart';
+import '../utilites/dialog/error_dialog.dart';
 
 class LoginView extends StatefulWidget {
   const LoginView({super.key});
@@ -71,11 +71,11 @@ class _LoginViewState extends State<LoginView> {
                         context, knotesRoute, (route) => false);
                   }
                 } on UserNotFoundAuthException {
-                  showErorAlert(context, "USER NOT FOUND");
+                  showErrorDialog(context, "USER NOT FOUND");
                 } on WrongPasswordAuthException {
-                  showErorAlert(context, "WRONG PASSWORD");
+                  showErrorDialog(context, "WRONG PASSWORD");
                 } on GenericAuthException {
-                  showErorAlert(context, "Authentication Error");
+                  showErrorDialog(context, "Authentication Error");
                 }
               },
               child: const Text("Login"),
