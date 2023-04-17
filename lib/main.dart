@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:mynotesfinal/constants/routes.dart';
 import 'package:mynotesfinal/services/auth/auth_services.dart';
 import 'package:mynotesfinal/views/login_view.dart';
-import 'package:mynotesfinal/views/notes/new_notes_view.dart';
+import 'package:mynotesfinal/views/notes/create_update_notes_view.dart';
 import 'package:mynotesfinal/views/notes/notes_view.dart';
 
 import 'package:mynotesfinal/views/registor_view.dart';
@@ -28,7 +28,7 @@ void main() {
         kregistorRoute: (context) => const RegistorView(),
         knotesRoute: (context) => const NotesView(),
         kverifyEMailRoute: (context) => const EmailVerifyView(),
-        knewNoteROute: (context) => const NewNoteView(),
+        knewNoteROute: (context) => const CreateUpdateNotesView(),
       },
     ),
   );
