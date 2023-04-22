@@ -3,15 +3,20 @@ import 'package:mynotesfinal/services/cloud/cloud_note.dart';
 import 'package:mynotesfinal/services/cloud/cloud_storage_constants.dart';
 import 'package:mynotesfinal/services/cloud/cloud_storage_exceptions.dart';
 
-class FirebaseCloud {
-  static final FirebaseCloud _shared = FirebaseCloud._sharedInstance();
-  FirebaseCloud._sharedInstance();
-  factory FirebaseCloud() => _shared;
+class FirebaseCloudStorage {
+  static final FirebaseCloudStorage _shared =
+      FirebaseCloudStorage._sharedInstance();
+  FirebaseCloudStorage._sharedInstance();
+  factory FirebaseCloudStorage() => _shared;
 
   final notes = FirebaseFirestore.instance.collection("notes");
 
-  void createNewNote({required String ownerUserId}) async {
-    await notes.add({ownerUserIdFieldName: ownerUserId, textFieldName: " "});
+  Future<CloudNote> createNewNote({required String ownerUserId}) async {
+    final document = await notes
+        .add({ownerUserIdFieldName: ownerUserId, textFieldName: " "});
+    final fetchedNote = await document.get();
+    return CloudNote(
+        documentId: fetchedNote.id, text: "", ownerUserId: ownerUserId);
   }
 
   Future<Iterable<CloudNote>> getNotes({required String ownerUserId}) async {
@@ -22,12 +27,9 @@ class FirebaseCloud {
             isEqualTo: ownerUserId,
           )
           .get()
-          .then((value) => value.docs.map((doc) {
-                return CloudNote(
-                    documentId: doc.id,
-                    text: doc.data()[textFieldName] as String,
-                    ownerUserId: doc.data()[ownerUserIdFieldName] as String);
-              }));
+          .then((value) => value.docs.map(
+                (doc) => CloudNote.fromSnapshot(doc),
+              ));
     } catch (e) {
       throw CouldNotGetAllNoteException();
     }
