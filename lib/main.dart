@@ -30,10 +30,10 @@ void main() {
         child: HomePage(),
       ),
       routes: {
-        kloginRoute: (context) => const LoginView(),
-        kregistorRoute: (context) => const RegistorView(),
-        knotesRoute: (context) => const NotesView(),
-        kverifyEMailRoute: (context) => const EmailVerifyView(),
+        // kloginRoute: (context) => const LoginView(),
+        // kregistorRoute: (context) => const RegistorView(),
+        // knotesRoute: (context) => const NotesView(),
+        // kverifyEMailRoute: (context) => const EmailVerifyView(),
         knewNoteROute: (context) => const CreateUpdateNotesView(),
       },
     ),
@@ -53,6 +53,8 @@ class HomePage extends StatelessWidget {
         return const EmailVerifyView();
       } else if (state is AuthStateLoggedOut) {
         return const LoginView();
+      } else if (state is AuthStateRegistering) {
+        return const RegistorView();
       } else {
         return const Scaffold(
           body: CircularProgressIndicator(),
