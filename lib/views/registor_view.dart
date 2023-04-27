@@ -51,41 +51,50 @@ class _RegistorViewState extends State<RegistorView> {
       },
       child: Scaffold(
         appBar: AppBar(title: const Text("Registor")),
-        body: Column(
-          children: [
-            TextField(
-              enableSuggestions: false,
-              autocorrect: true,
-              keyboardType: TextInputType.emailAddress,
-              controller: _emailController,
-              decoration: InputDecoration(hintText: "Enter your Email"),
-            ),
-            TextField(
-              obscureText: true,
-              enableSuggestions: false,
-              autocorrect: true,
-              controller: _passwordController,
-              decoration: InputDecoration(hintText: "Enter your password"),
-            ),
-            Center(
-              child: TextButton(
-                onPressed: () async {
-                  final email = _emailController.text;
-                  final password = _passwordController.text;
-                  context
-                      .read<AuthBloc>()
-                      .add(AuthEventRegistor(email, password));
-                },
-                child: const Text("Registor"),
+        body: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text("Register with us"),
+              TextField(
+                autofocus: true,
+                enableSuggestions: false,
+                autocorrect: true,
+                keyboardType: TextInputType.emailAddress,
+                controller: _emailController,
+                decoration: InputDecoration(hintText: "Enter your Email"),
               ),
-            ),
-            TextButton(
-              onPressed: () {
-                context.read<AuthBloc>().add(AuthEventLogOut());
-              },
-              child: const Text("Too Login.."),
-            )
-          ],
+              TextField(
+                autofocus: true,
+                obscureText: true,
+                enableSuggestions: false,
+                autocorrect: true,
+                controller: _passwordController,
+                decoration: InputDecoration(hintText: "Enter your password"),
+              ),
+              Center(
+                child: TextButton(
+                  onPressed: () async {
+                    final email = _emailController.text;
+                    final password = _passwordController.text;
+                    context
+                        .read<AuthBloc>()
+                        .add(AuthEventRegister(email, password));
+                  },
+                  child: const Text("Registor"),
+                ),
+              ),
+              Center(
+                child: TextButton(
+                  onPressed: () {
+                    context.read<AuthBloc>().add(const AuthEventLogOut());
+                  },
+                  child: const Text("Too Login.."),
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );

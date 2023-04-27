@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mynotesfinal/constants/routes.dart';
-import 'package:mynotesfinal/helpers/loading/loadin_screen.dart';
+import 'package:mynotesfinal/helpers/loading/loading_screen.dart';
 import 'package:mynotesfinal/services/auth/auth_services.dart';
 import 'package:mynotesfinal/services/auth/bloc/auth_bloc.dart';
 import 'package:mynotesfinal/services/auth/bloc/auth_events.dart';
 import 'package:mynotesfinal/services/auth/bloc/auth_state.dart';
 import 'package:mynotesfinal/services/auth/firebase_auth_provider.dart';
+import 'package:mynotesfinal/views/forgot_password_view.dart';
 import 'package:mynotesfinal/views/login_view.dart';
 import 'package:mynotesfinal/views/notes/create_update_notes_view.dart';
 import 'package:mynotesfinal/views/notes/notes_view.dart';
@@ -58,6 +59,8 @@ class HomePage extends StatelessWidget {
     }, builder: (context, state) {
       if (state is AuthStateLoggedIn) {
         return const NotesView();
+      } else if (state is AuthStateForgotPassword) {
+        return const ForgotPasswordView();
       } else if (state is AuthStateNeedsVerification) {
         return const EmailVerifyView();
       } else if (state is AuthStateLoggedOut) {
