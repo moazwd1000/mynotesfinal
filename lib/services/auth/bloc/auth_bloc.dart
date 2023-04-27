@@ -4,7 +4,8 @@ import 'package:mynotesfinal/services/auth/bloc/auth_events.dart';
 import 'package:mynotesfinal/services/auth/bloc/auth_state.dart';
 
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
-  AuthBloc(AuthProvider provider) : super(const AuthStateUnIniailaized()) {
+  AuthBloc(AuthProvider provider)
+      : super(const AuthStateUnIniailaized(isLoading: true)) {
     on<AuthEventSendEmailVerification>(
       (event, emit) async {
         await provider.sendEmailVerfication();
@@ -19,9 +20,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         try {
           await provider.createUser(email: email, password: password);
           await provider.sendEmailVerfication();
-          emit(AuthStateNeedsVerification());
+          emit(AuthStateNeedsVerification(isLoading: false));
         } on Exception catch (e) {
-          emit(AuthStateRegistering(e));
+          emit(AuthStateRegistering(isLoading: false, exception: e));
         }
       },
     );
@@ -30,11 +31,14 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       await provider.initialize();
       final user = provider.currentUser;
       if (user == null) {
-        emit(const AuthStateLoggedOut(exception: null, isLoading: false));
+        emit(const AuthStateLoggedOut(
+            exception: null,
+            isLoading: true,
+            Loadingtext: "Please wait while you are logged In"));
       } else if (!user.isEmailVerified) {
-        emit(const AuthStateNeedsVerification());
+        emit(const AuthStateNeedsVerification(isLoading: false));
       } else {
-        emit(AuthStateLoggedIn(user));
+        emit(AuthStateLoggedIn(isLoading: false, user: user));
       }
     });
 
@@ -47,10 +51,10 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
           final user = await provider.logIn(email: email, password: password);
           if (!user.isEmailVerified) {
             emit(const AuthStateLoggedOut(exception: null, isLoading: false));
-            emit(const AuthStateNeedsVerification());
+            emit(const AuthStateNeedsVerification(isLoading: false));
           } else {
             emit(const AuthStateLoggedOut(exception: null, isLoading: false));
-            emit(AuthStateLoggedIn(user));
+            emit(AuthStateLoggedIn(isLoading: false, user: user));
           }
         } on Exception catch (e) {
           emit(AuthStateLoggedOut(exception: e, isLoading: false));
